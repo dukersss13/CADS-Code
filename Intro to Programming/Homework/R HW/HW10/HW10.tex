@@ -1,0 +1,939 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={HW10.R},
+            pdfauthor={Duc},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\providecommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+
+  \title{HW10.R}
+    \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+    \author{Duc}
+    \preauthor{\centering\large\emph}
+  \postauthor{\par}
+      \predate{\centering\large\emph}
+  \postdate{\par}
+    \date{2019-10-29}
+
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#1)}
+\NormalTok{blow =}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"blowfly.txt"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
+
+\KeywordTok{attach}\NormalTok{(blow)}
+
+\KeywordTok{unique}\NormalTok{(flies)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1]   948   942   911   858   801   676   504   397   248   146  1801
+##  [12]  6235  5974  8921  6610  5973  5673  3875  2361  1352  1226   912
+##  [23]   521   363   229   142    82   542   939  2431  3687  4543  4535
+##  [34]  5441  4412  3022  2656  1967  1295   915   551   313   167    95
+##  [45]    93    60    68  5259  6673  3987  2952  3648  4222  3889  2295
+##  [56]  1509   928   739   566   383   274   192   226   519  1224  2236
+##  [67]  3818  6208  5996  5789  6652  7939  4868  3952  2712  1734   703
+##  [78]   508   366   279   243   343   761  1025  1221  1600  2267  3290
+##  [89]  3471  3637  3703  4876  5364  4890  3029  1950  1225  1076   905
+## [100]   772   628   473   539   825  1702  2868  4473  5221  6592  6400
+## [111]  4752  3521  2719  1931  1500  1082   849   774   864  1308  1624
+## [122]  2224  2423  2959  3547  7237  5218  5311  4273  3270  2281  1549
+## [133]  1091   796   610   445   894  1454  2262  2363  3847  3876  3935
+## [144]  3479  3415  3861  3571  3113  2319  1630  1297   861   659   701
+## [155]   762  1188  1778  2428  3806  4519  5646  4851  5374  4713  7367
+## [166]  7236  5245  3636  2417  1258   766   479   402   254   604  1346
+## [177]  2342  3328  3599  4081  7643  7919  6098  6896  5634  5134  4188
+## [188]  3469  2442  1790  1722  1488  1416  1369  1666  2627  3840  4044
+## [199]  4929  5111  3152  4462  4082  3026  1589  2075  1829  1386  1149
+## [210]   968  1170  1465  1676  3075  3815  4639  4424  2784  5860  5781
+## [221]  4897  3920  3835  3618  3050  3772  3517  3350  3018  2625  2412
+## [232]  2221  2619  3203  2706  2717  2175  1628  2388  3677  3156  4272
+## [243]  3771  4955  5584  3891  3501  4436  4369  3394  3869  2922  1843
+## [254]  2837  4690  5119  5839  5389  4993  4446  4243  4620  4849  3664
+## [265]  3016  2881  3821  4300  4168  5446  5477  8579  7533  6884  4127
+## [276]  5546  6313  6650  6304  4842  4352  3215  2652  2330  3123  3955
+## [287]  4494  4780  5753  5555  5712  4786  4066  2891  4404  4398  4112
+## [298]  4401  5779  6597  8091 11282 12446 13712 11017 14683  7258  6195
+## [309]  5962  4213  2775  1781   936   898  1160  3158  3386  4547  4823
+## [320]  4970  4940  5793  7836  4457  6901  8191  6766  5165  2919  3431
+## [331]  3162  2525  2290  1955  1936  2384  4666  7219  8306  8027  7010
+## [342]  8149  8949  6105  5324  5766  6214  7007  8154  9049  6883  8103
+## [353]  6803
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{length}\NormalTok{(}\KeywordTok{unique}\NormalTok{(flies))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 353
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#353 numbers are unique since the first row isn't a number.}
+
+\CommentTok{#2) }
+\NormalTok{p =}\StringTok{ }\DecValTok{10000}
+\NormalTok{t =}\StringTok{ }\DecValTok{0}
+\NormalTok{i =}\StringTok{ }\DecValTok{0} 
+\ControlFlowTok{while}\NormalTok{(p }\OperatorTok{<}\StringTok{ }\DecValTok{1000000}\NormalTok{)}
+\NormalTok{\{}
+\NormalTok{  p =}\StringTok{ }\NormalTok{p }\OperatorTok{+}\StringTok{ }\NormalTok{p}\OperatorTok{*}\FloatTok{0.06}
+\NormalTok{  p =}\StringTok{ }\NormalTok{p }\OperatorTok{+}\StringTok{ }\DecValTok{10000}
+\NormalTok{  t =}\StringTok{ }\NormalTok{t }\OperatorTok{+}\StringTok{ }\DecValTok{1}
+\NormalTok{\}}
+\NormalTok{t}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 33
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#3)}
+\NormalTok{country =}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"country.txt"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
+\KeywordTok{attach}\NormalTok{(country)}
+\KeywordTok{as.vector}\NormalTok{(Country[}\KeywordTok{grep}\NormalTok{(}\StringTok{"^.\{3\}c"}\NormalTok{,}\KeywordTok{as.character}\NormalTok{(Country))])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Czechoslovakia" "Liechtenstein"  "Seychelles"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#4)}
+\NormalTok{area =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(r,V)}
+\NormalTok{\{ }
+\NormalTok{h =}\StringTok{ }\NormalTok{(}\DecValTok{3}\OperatorTok{*}\NormalTok{V)}\OperatorTok{/}\NormalTok{(r}\OperatorTok{^}\DecValTok{2}\OperatorTok{*}\NormalTok{pi)}
+\NormalTok{A =}\StringTok{ }\NormalTok{pi}\OperatorTok{*}\NormalTok{r}\OperatorTok{*}\NormalTok{(}\KeywordTok{sqrt}\NormalTok{(r}\OperatorTok{^}\DecValTok{2} \OperatorTok{+}\StringTok{ }\NormalTok{h}\OperatorTok{^}\DecValTok{2}\NormalTok{))}
+\KeywordTok{return}\NormalTok{(A)}
+\NormalTok{\}}
+
+\NormalTok{V =}\StringTok{ }\DecValTok{10}
+\NormalTok{r =}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\FloatTok{0.1}\NormalTok{,}\DecValTok{10}\NormalTok{,}\FloatTok{0.1}\NormalTok{)}
+\NormalTok{A =}\StringTok{ }\KeywordTok{area}\NormalTok{(r,V)}
+
+\KeywordTok{plot}\NormalTok{(r,A,}\DataTypeTok{type =} \StringTok{'l'}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{HW10_files/figure-latex/unnamed-chunk-1-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{which}\NormalTok{(A }\OperatorTok{==}\StringTok{ }\KeywordTok{min}\NormalTok{(A))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 19
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{r[}\DecValTok{19}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 1.9
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#5)}
+\NormalTok{fact =}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)}
+\NormalTok{\{}
+\NormalTok{  f =}\StringTok{ }\DecValTok{1}
+  \ControlFlowTok{if}\NormalTok{ (x}\OperatorTok{<}\DecValTok{2}\NormalTok{) }\KeywordTok{return}\NormalTok{ (}\DecValTok{1}\NormalTok{)}
+  \ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{2}\OperatorTok{:}\NormalTok{x)}
+\NormalTok{  \{}
+\NormalTok{    f =}\StringTok{ }\NormalTok{f}\OperatorTok{*}\NormalTok{i}
+\NormalTok{  \}}
+\NormalTok{  f}
+\NormalTok{\}}
+\KeywordTok{sapply}\NormalTok{(}\DecValTok{0}\OperatorTok{:}\DecValTok{10}\NormalTok{,fact)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]       1       1       2       6      24     120     720    5040
+##  [9]   40320  362880 3628800
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#6)}
+\NormalTok{cellsT =}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"cells.txt"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
+\NormalTok{temp =}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"temp.txt"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
+
+\KeywordTok{attach}\NormalTok{(cellsT)}
+\KeywordTok{attach}\NormalTok{(temp)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## The following object is masked from country:
+## 
+##     Population
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#a)}
+\KeywordTok{lapply}\NormalTok{(cellsT,typeof)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $cells
+## [1] "integer"
+## 
+## $smoker
+## [1] "logical"
+## 
+## $age
+## [1] "integer"
+## 
+## $sex
+## [1] "integer"
+## 
+## $weight
+## [1] "integer"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lapply}\NormalTok{(temp,typeof)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $Temp
+## [1] "double"
+## 
+## $Industry
+## [1] "integer"
+## 
+## $Population
+## [1] "integer"
+## 
+## $Wind
+## [1] "double"
+## 
+## $Rain
+## [1] "double"
+## 
+## $Wet.days
+## [1] "integer"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#b)}
+\NormalTok{cell =}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"cells.txt"}\NormalTok{, }\DataTypeTok{header=}\NormalTok{ T)}
+\KeywordTok{names}\NormalTok{(cell)[}\DecValTok{1}\NormalTok{] =}\StringTok{ "Cells"}
+\KeywordTok{names}\NormalTok{(cell)[}\DecValTok{2}\NormalTok{] =}\StringTok{ "Smoker"}
+\KeywordTok{names}\NormalTok{(cell)[}\DecValTok{3}\NormalTok{] =}\StringTok{ "Smoker's Age"}
+\KeywordTok{names}\NormalTok{(cell)[}\DecValTok{4}\NormalTok{] =}\StringTok{ "Smoker's Gender"}
+\KeywordTok{names}\NormalTok{(cell)[}\DecValTok{3}\NormalTok{] =}\StringTok{ "Smoker's Weight"}
+
+\NormalTok{temperature =}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\StringTok{"temp.txt"}\NormalTok{, }\DataTypeTok{header =}\NormalTok{ T)}
+\KeywordTok{names}\NormalTok{(temperature)[}\DecValTok{1}\NormalTok{] =}\StringTok{ "Temperature"}
+\KeywordTok{names}\NormalTok{(temperature)[}\DecValTok{3}\NormalTok{] =}\StringTok{ "City Population"}
+\KeywordTok{names}\NormalTok{(temperature)[}\DecValTok{6}\NormalTok{] =}\StringTok{ "Wet Days"}
+
+\CommentTok{#c)}
+\KeywordTok{write.table}\NormalTok{(temperature)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## "Temperature" "Industry" "City Population" "Wind" "Rain" "Wet Days"
+## "1" 61.5 368 497 9.1 48.34 115
+## "2" 55.6 291 593 8.3 43.11 123
+## "3" 55.9 775 622 9.5 35.89 105
+## "4" 51 137 176 8.7 15.17 89
+## "5" 68.4 136 529 8.8 54.47 116
+## "6" 47.6 44 116 8.8 33.36 135
+## "7" 66.2 641 844 10.9 35.94 78
+## "8" 49.9 1064 1513 10.1 30.96 129
+## "9" 57.8 197 299 7.6 42.59 115
+## "10" 50.4 347 520 9.4 36.22 147
+## "11" 57.3 434 757 9.3 38.98 111
+## "12" 52.3 361 746 9.7 38.74 121
+## "13" 51.5 181 347 10.9 30.18 98
+## "14" 59.4 275 448 7.9 46 119
+## "15" 51.9 454 515 9 12.95 86
+## "16" 54 462 453 7.1 39.04 132
+## "17" 55 625 905 9.6 41.31 111
+## "18" 61 91 132 8.2 48.52 100
+## "19" 55.2 35 71 6.6 40.75 148
+## "20" 56.7 453 716 8.7 20.66 67
+## "21" 70.3 213 582 6 7.05 36
+## "22" 50.6 3344 3369 10.4 34.44 122
+## "23" 49.1 412 158 9 43.37 127
+## "24" 68.9 721 1233 10.8 48.19 103
+## "25" 54.6 1692 1950 9.6 39.93 115
+## "26" 56.6 125 277 12.7 30.58 82
+## "27" 54 80 80 9 40.25 114
+## "28" 45.7 569 717 11.8 29.07 123
+## "29" 51.1 379 531 9.4 38.79 164
+## "30" 43.5 669 744 10.6 25.94 137
+## "31" 49.7 1007 751 10.9 34.99 155
+## "32" 68.3 204 361 8.4 56.77 113
+## "33" 75.5 207 335 9 59.8 128
+## "34" 51.5 266 540 8.6 37.01 134
+## "35" 59.3 96 308 10.6 44.68 116
+## "36" 61.6 337 624 9.2 49.1 105
+## "37" 47.1 391 463 12.4 36.11 166
+## "38" 54.5 381 507 10 37 99
+## "39" 49 104 201 11.2 30.85 103
+## "40" 56.8 46 244 8.9 7.77 58
+## "41" 50 343 179 10.6 42.75 125
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{write.table}\NormalTok{(cell)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## "Cells" "Smoker" "Smoker's Weight" "Smoker's Gender" "weight"
+## "1" 1 TRUE "young" "male" "normal"
+## "2" 0 TRUE "young" "male" "normal"
+## "3" 1 TRUE "young" "male" "normal"
+## "4" 1 TRUE "young" "male" "normal"
+## "5" 0 TRUE "young" "male" "normal"
+## "6" 2 TRUE "young" "male" "normal"
+## "7" 1 TRUE "young" "male" "normal"
+## "8" 0 TRUE "young" "male" "normal"
+## "9" 5 TRUE "young" "male" "normal"
+## "10" 1 TRUE "young" "male" "normal"
+## "11" 0 TRUE "young" "male" "normal"
+## "12" 2 TRUE "young" "male" "normal"
+## "13" 0 TRUE "young" "male" "normal"
+## "14" 1 TRUE "young" "male" "normal"
+## "15" 2 TRUE "young" "male" "normal"
+## "16" 1 TRUE "young" "male" "normal"
+## "17" 0 TRUE "young" "male" "normal"
+## "18" 1 TRUE "young" "male" "normal"
+## "19" 2 TRUE "young" "male" "normal"
+## "20" 0 TRUE "young" "male" "normal"
+## "21" 4 TRUE "young" "male" "normal"
+## "22" 1 TRUE "young" "male" "normal"
+## "23" 1 TRUE "young" "male" "normal"
+## "24" 1 TRUE "young" "male" "over"
+## "25" 0 TRUE "young" "male" "over"
+## "26" 3 TRUE "young" "male" "over"
+## "27" 1 TRUE "young" "male" "over"
+## "28" 4 TRUE "young" "male" "over"
+## "29" 0 TRUE "young" "male" "over"
+## "30" 5 TRUE "young" "male" "obese"
+## "31" 3 TRUE "young" "male" "obese"
+## "32" 5 TRUE "young" "male" "obese"
+## "33" 6 TRUE "young" "male" "obese"
+## "34" 1 TRUE "young" "male" "obese"
+## "35" 0 FALSE "young" "male" "normal"
+## "36" 0 FALSE "young" "male" "normal"
+## "37" 1 FALSE "young" "male" "normal"
+## "38" 0 FALSE "young" "male" "normal"
+## "39" 2 FALSE "young" "male" "normal"
+## "40" 0 FALSE "young" "male" "over"
+## "41" 2 FALSE "young" "male" "over"
+## "42" 0 FALSE "young" "male" "over"
+## "43" 0 FALSE "young" "male" "over"
+## "44" 2 FALSE "young" "male" "obese"
+## "45" 1 FALSE "young" "male" "obese"
+## "46" 4 FALSE "young" "male" "obese"
+## "47" 2 FALSE "young" "male" "obese"
+## "48" 0 FALSE "young" "male" "obese"
+## "49" 1 TRUE "mid" "male" "normal"
+## "50" 0 TRUE "mid" "male" "normal"
+## "51" 2 TRUE "mid" "male" "normal"
+## "52" 1 TRUE "mid" "male" "normal"
+## "53" 0 TRUE "mid" "male" "normal"
+## "54" 3 TRUE "mid" "male" "normal"
+## "55" 2 TRUE "mid" "male" "normal"
+## "56" 0 TRUE "mid" "male" "normal"
+## "57" 3 TRUE "mid" "male" "obese"
+## "58" 5 TRUE "mid" "male" "obese"
+## "59" 6 TRUE "mid" "male" "obese"
+## "60" 2 TRUE "mid" "male" "obese"
+## "61" 3 TRUE "mid" "male" "obese"
+## "62" 0 TRUE "mid" "male" "normal"
+## "63" 1 TRUE "mid" "male" "normal"
+## "64" 0 TRUE "mid" "male" "normal"
+## "65" 2 TRUE "mid" "male" "normal"
+## "66" 1 TRUE "mid" "male" "normal"
+## "67" 0 TRUE "mid" "male" "normal"
+## "68" 2 TRUE "mid" "male" "normal"
+## "69" 0 TRUE "mid" "male" "over"
+## "70" 2 TRUE "mid" "male" "over"
+## "71" 1 TRUE "mid" "male" "over"
+## "72" 0 FALSE "mid" "male" "normal"
+## "73" 0 FALSE "mid" "male" "normal"
+## "74" 2 FALSE "mid" "male" "normal"
+## "75" 2 FALSE "mid" "male" "normal"
+## "76" 0 FALSE "mid" "male" "normal"
+## "77" 0 FALSE "mid" "male" "normal"
+## "78" 0 FALSE "mid" "male" "normal"
+## "79" 0 FALSE "mid" "male" "normal"
+## "80" 0 FALSE "mid" "male" "over"
+## "81" 0 FALSE "mid" "male" "over"
+## "82" 0 FALSE "mid" "male" "over"
+## "83" 1 FALSE "mid" "male" "over"
+## "84" 0 FALSE "mid" "male" "over"
+## "85" 0 FALSE "mid" "male" "obese"
+## "86" 3 FALSE "mid" "male" "obese"
+## "87" 0 FALSE "mid" "male" "obese"
+## "88" 0 TRUE "old" "male" "normal"
+## "89" 1 TRUE "old" "male" "normal"
+## "90" 2 TRUE "old" "male" "normal"
+## "91" 1 TRUE "old" "male" "normal"
+## "92" 0 TRUE "old" "male" "normal"
+## "93" 1 TRUE "old" "male" "normal"
+## "94" 0 TRUE "old" "male" "normal"
+## "95" 2 TRUE "old" "male" "over"
+## "96" 3 TRUE "old" "male" "over"
+## "97" 2 TRUE "old" "male" "over"
+## "98" 4 TRUE "old" "male" "over"
+## "99" 2 TRUE "old" "male" "over"
+## "100" 3 TRUE "old" "male" "over"
+## "101" 4 TRUE "old" "male" "over"
+## "102" 1 TRUE "old" "male" "over"
+## "103" 5 TRUE "old" "male" "obese"
+## "104" 6 TRUE "old" "male" "obese"
+## "105" 0 TRUE "old" "male" "over"
+## "106" 3 TRUE "old" "male" "over"
+## "107" 3 TRUE "old" "male" "over"
+## "108" 0 TRUE "old" "male" "over"
+## "109" 2 TRUE "old" "male" "over"
+## "110" 0 TRUE "old" "male" "over"
+## "111" 0 FALSE "old" "male" "over"
+## "112" 1 FALSE "old" "male" "over"
+## "113" 0 FALSE "old" "male" "over"
+## "114" 0 FALSE "old" "male" "obese"
+## "115" 0 FALSE "old" "male" "obese"
+## "116" 3 FALSE "old" "male" "obese"
+## "117" 0 FALSE "old" "male" "obese"
+## "118" 0 FALSE "old" "male" "obese"
+## "119" 2 FALSE "old" "male" "obese"
+## "120" 0 FALSE "old" "male" "obese"
+## "121" 1 FALSE "old" "male" "obese"
+## "122" 1 FALSE "old" "male" "obese"
+## "123" 3 FALSE "old" "male" "obese"
+## "124" 3 FALSE "old" "male" "obese"
+## "125" 3 FALSE "old" "male" "obese"
+## "126" 4 FALSE "old" "male" "obese"
+## "127" 5 FALSE "old" "male" "obese"
+## "128" 0 FALSE "old" "male" "obese"
+## "129" 0 FALSE "old" "male" "obese"
+## "130" 0 FALSE "old" "male" "obese"
+## "131" 0 FALSE "old" "male" "obese"
+## "132" 0 FALSE "old" "male" "obese"
+## "133" 0 TRUE "young" "male" "obese"
+## "134" 2 TRUE "young" "male" "obese"
+## "135" 0 TRUE "young" "male" "obese"
+## "136" 0 TRUE "young" "male" "obese"
+## "137" 1 TRUE "young" "male" "obese"
+## "138" 0 TRUE "young" "male" "obese"
+## "139" 0 TRUE "young" "male" "obese"
+## "140" 0 TRUE "young" "male" "obese"
+## "141" 4 TRUE "young" "male" "obese"
+## "142" 5 TRUE "mid" "male" "obese"
+## "143" 6 TRUE "mid" "male" "obese"
+## "144" 4 TRUE "mid" "male" "obese"
+## "145" 5 TRUE "mid" "male" "obese"
+## "146" 2 TRUE "mid" "male" "obese"
+## "147" 4 TRUE "old" "male" "obese"
+## "148" 7 TRUE "old" "male" "obese"
+## "149" 6 TRUE "old" "male" "obese"
+## "150" 5 TRUE "old" "male" "obese"
+## "151" 1 TRUE "old" "male" "obese"
+## "152" 0 FALSE "young" "male" "normal"
+## "153" 0 FALSE "young" "male" "normal"
+## "154" 2 FALSE "young" "male" "normal"
+## "155" 0 FALSE "young" "male" "normal"
+## "156" 0 FALSE "young" "male" "normal"
+## "157" 0 FALSE "young" "male" "normal"
+## "158" 0 FALSE "young" "male" "over"
+## "159" 0 FALSE "young" "male" "over"
+## "160" 0 FALSE "young" "male" "over"
+## "161" 1 FALSE "young" "male" "over"
+## "162" 0 FALSE "young" "male" "over"
+## "163" 0 FALSE "mid" "male" "normal"
+## "164" 2 FALSE "mid" "male" "normal"
+## "165" 0 FALSE "mid" "male" "normal"
+## "166" 0 FALSE "mid" "male" "normal"
+## "167" 0 FALSE "mid" "male" "normal"
+## "168" 2 FALSE "mid" "male" "normal"
+## "169" 3 FALSE "mid" "male" "normal"
+## "170" 0 FALSE "mid" "male" "normal"
+## "171" 0 FALSE "mid" "male" "normal"
+## "172" 0 FALSE "mid" "male" "normal"
+## "173" 0 FALSE "mid" "male" "normal"
+## "174" 0 FALSE "mid" "male" "normal"
+## "175" 1 FALSE "mid" "male" "normal"
+## "176" 0 FALSE "mid" "male" "normal"
+## "177" 0 FALSE "mid" "male" "normal"
+## "178" 1 FALSE "mid" "male" "over"
+## "179" 0 FALSE "mid" "male" "over"
+## "180" 1 FALSE "mid" "male" "over"
+## "181" 3 FALSE "mid" "male" "over"
+## "182" 4 FALSE "mid" "male" "over"
+## "183" 0 FALSE "mid" "male" "over"
+## "184" 0 FALSE "mid" "male" "over"
+## "185" 0 FALSE "mid" "male" "over"
+## "186" 2 FALSE "mid" "male" "over"
+## "187" 0 FALSE "mid" "male" "over"
+## "188" 0 FALSE "mid" "male" "over"
+## "189" 0 FALSE "mid" "male" "over"
+## "190" 0 FALSE "mid" "male" "over"
+## "191" 2 FALSE "mid" "male" "over"
+## "192" 0 FALSE "mid" "male" "over"
+## "193" 0 FALSE "mid" "male" "over"
+## "194" 0 FALSE "mid" "male" "obese"
+## "195" 0 FALSE "mid" "male" "obese"
+## "196" 3 FALSE "mid" "male" "obese"
+## "197" 0 FALSE "mid" "male" "obese"
+## "198" 4 FALSE "mid" "male" "obese"
+## "199" 0 FALSE "mid" "male" "obese"
+## "200" 0 FALSE "mid" "male" "obese"
+## "201" 0 FALSE "mid" "male" "obese"
+## "202" 1 FALSE "mid" "male" "obese"
+## "203" 0 FALSE "mid" "male" "obese"
+## "204" 0 FALSE "mid" "male" "obese"
+## "205" 0 FALSE "mid" "male" "obese"
+## "206" 0 FALSE "mid" "male" "obese"
+## "207" 2 FALSE "mid" "male" "obese"
+## "208" 0 FALSE "mid" "male" "obese"
+## "209" 0 FALSE "mid" "male" "obese"
+## "210" 0 FALSE "mid" "male" "obese"
+## "211" 0 FALSE "mid" "male" "obese"
+## "212" 0 FALSE "mid" "male" "obese"
+## "213" 0 FALSE "mid" "male" "obese"
+## "214" 0 FALSE "old" "male" "normal"
+## "215" 0 FALSE "old" "male" "normal"
+## "216" 2 FALSE "old" "male" "normal"
+## "217" 1 FALSE "old" "male" "normal"
+## "218" 0 FALSE "old" "male" "normal"
+## "219" 0 FALSE "old" "male" "normal"
+## "220" 0 FALSE "old" "male" "normal"
+## "221" 0 FALSE "old" "male" "normal"
+## "222" 1 FALSE "old" "male" "normal"
+## "223" 0 FALSE "old" "male" "normal"
+## "224" 0 FALSE "old" "male" "normal"
+## "225" 0 FALSE "old" "male" "normal"
+## "226" 1 FALSE "old" "male" "over"
+## "227" 0 FALSE "old" "male" "over"
+## "228" 1 TRUE "young" "female" "normal"
+## "229" 2 TRUE "young" "female" "normal"
+## "230" 0 TRUE "young" "female" "normal"
+## "231" 2 TRUE "young" "female" "normal"
+## "232" 3 TRUE "young" "female" "normal"
+## "233" 0 TRUE "young" "female" "normal"
+## "234" 1 TRUE "young" "female" "normal"
+## "235" 3 TRUE "young" "female" "over"
+## "236" 4 TRUE "young" "female" "over"
+## "237" 4 TRUE "young" "female" "over"
+## "238" 2 TRUE "young" "female" "over"
+## "239" 4 TRUE "young" "female" "over"
+## "240" 5 TRUE "young" "female" "over"
+## "241" 0 TRUE "young" "female" "over"
+## "242" 0 TRUE "young" "female" "over"
+## "243" 0 TRUE "young" "female" "over"
+## "244" 6 TRUE "young" "female" "obese"
+## "245" 2 TRUE "young" "female" "obese"
+## "246" 7 TRUE "young" "female" "obese"
+## "247" 0 TRUE "mid" "female" "normal"
+## "248" 1 TRUE "mid" "female" "normal"
+## "249" 0 TRUE "mid" "female" "normal"
+## "250" 1 TRUE "mid" "female" "normal"
+## "251" 2 TRUE "mid" "female" "normal"
+## "252" 0 TRUE "mid" "female" "normal"
+## "253" 0 TRUE "mid" "female" "normal"
+## "254" 0 TRUE "mid" "female" "normal"
+## "255" 0 TRUE "mid" "female" "normal"
+## "256" 0 TRUE "mid" "female" "normal"
+## "257" 0 TRUE "mid" "female" "normal"
+## "258" 2 TRUE "mid" "female" "over"
+## "259" 3 TRUE "old" "female" "over"
+## "260" 4 TRUE "old" "female" "over"
+## "261" 3 TRUE "old" "female" "over"
+## "262" 0 TRUE "old" "female" "over"
+## "263" 6 TRUE "old" "female" "obese"
+## "264" 0 FALSE "young" "female" "normal"
+## "265" 0 FALSE "young" "female" "normal"
+## "266" 0 FALSE "young" "female" "normal"
+## "267" 3 FALSE "young" "female" "normal"
+## "268" 0 FALSE "young" "female" "normal"
+## "269" 0 FALSE "young" "female" "normal"
+## "270" 0 FALSE "young" "female" "normal"
+## "271" 0 FALSE "young" "female" "normal"
+## "272" 0 FALSE "young" "female" "normal"
+## "273" 2 FALSE "young" "female" "normal"
+## "274" 0 FALSE "young" "female" "normal"
+## "275" 1 FALSE "young" "female" "normal"
+## "276" 0 FALSE "young" "female" "normal"
+## "277" 1 FALSE "young" "female" "normal"
+## "278" 0 FALSE "young" "female" "over"
+## "279" 0 FALSE "young" "female" "over"
+## "280" 1 FALSE "young" "female" "over"
+## "281" 1 FALSE "young" "female" "over"
+## "282" 0 FALSE "young" "female" "obese"
+## "283" 1 FALSE "young" "female" "obese"
+## "284" 0 FALSE "mid" "female" "normal"
+## "285" 0 FALSE "mid" "female" "normal"
+## "286" 2 FALSE "mid" "female" "normal"
+## "287" 0 FALSE "mid" "female" "normal"
+## "288" 0 FALSE "mid" "female" "normal"
+## "289" 0 FALSE "mid" "female" "normal"
+## "290" 3 FALSE "mid" "female" "normal"
+## "291" 0 FALSE "mid" "female" "normal"
+## "292" 0 FALSE "mid" "female" "normal"
+## "293" 0 FALSE "mid" "female" "normal"
+## "294" 0 FALSE "mid" "female" "normal"
+## "295" 0 FALSE "mid" "female" "normal"
+## "296" 2 FALSE "mid" "female" "normal"
+## "297" 0 FALSE "mid" "female" "normal"
+## "298" 0 FALSE "mid" "female" "normal"
+## "299" 1 FALSE "mid" "female" "normal"
+## "300" 0 FALSE "mid" "female" "normal"
+## "301" 0 FALSE "mid" "female" "normal"
+## "302" 1 FALSE "mid" "female" "normal"
+## "303" 0 FALSE "mid" "female" "normal"
+## "304" 1 FALSE "mid" "female" "normal"
+## "305" 0 FALSE "mid" "female" "normal"
+## "306" 0 FALSE "mid" "female" "normal"
+## "307" 0 FALSE "mid" "female" "over"
+## "308" 0 FALSE "mid" "female" "over"
+## "309" 0 FALSE "mid" "female" "over"
+## "310" 1 FALSE "mid" "female" "over"
+## "311" 1 FALSE "mid" "female" "obese"
+## "312" 2 FALSE "mid" "female" "obese"
+## "313" 0 FALSE "old" "female" "normal"
+## "314" 0 FALSE "old" "female" "normal"
+## "315" 0 FALSE "old" "female" "normal"
+## "316" 0 FALSE "old" "female" "normal"
+## "317" 1 FALSE "old" "female" "normal"
+## "318" 0 FALSE "old" "female" "normal"
+## "319" 0 FALSE "old" "female" "normal"
+## "320" 0 FALSE "old" "female" "normal"
+## "321" 1 FALSE "old" "female" "normal"
+## "322" 0 FALSE "old" "female" "normal"
+## "323" 0 FALSE "old" "female" "normal"
+## "324" 1 FALSE "old" "female" "normal"
+## "325" 0 FALSE "old" "female" "normal"
+## "326" 0 FALSE "old" "female" "over"
+## "327" 2 FALSE "old" "female" "over"
+## "328" 0 FALSE "old" "female" "over"
+## "329" 3 FALSE "old" "female" "over"
+## "330" 0 FALSE "old" "female" "over"
+## "331" 0 FALSE "old" "female" "over"
+## "332" 0 FALSE "old" "female" "over"
+## "333" 0 FALSE "old" "female" "over"
+## "334" 0 FALSE "old" "female" "over"
+## "335" 0 FALSE "old" "female" "over"
+## "336" 1 FALSE "old" "female" "over"
+## "337" 0 FALSE "old" "female" "over"
+## "338" 5 FALSE "old" "female" "over"
+## "339" 0 FALSE "old" "female" "over"
+## "340" 0 FALSE "old" "female" "over"
+## "341" 0 FALSE "old" "female" "over"
+## "342" 0 FALSE "old" "female" "over"
+## "343" 0 FALSE "old" "female" "over"
+## "344" 3 FALSE "old" "female" "over"
+## "345" 0 FALSE "old" "female" "over"
+## "346" 0 FALSE "old" "female" "over"
+## "347" 0 FALSE "old" "female" "obese"
+## "348" 0 FALSE "old" "female" "obese"
+## "349" 2 FALSE "old" "female" "obese"
+## "350" 0 FALSE "old" "female" "obese"
+## "351" 3 FALSE "old" "female" "obese"
+## "352" 3 FALSE "old" "female" "obese"
+## "353" 2 FALSE "old" "female" "obese"
+## "354" 5 FALSE "old" "female" "obese"
+## "355" 0 FALSE "old" "female" "obese"
+## "356" 1 FALSE "old" "female" "obese"
+## "357" 0 FALSE "old" "female" "obese"
+## "358" 0 FALSE "old" "female" "obese"
+## "359" 0 FALSE "old" "female" "obese"
+## "360" 0 FALSE "old" "female" "obese"
+## "361" 1 FALSE "old" "female" "obese"
+## "362" 0 FALSE "old" "female" "obese"
+## "363" 0 FALSE "old" "female" "obese"
+## "364" 0 FALSE "old" "female" "normal"
+## "365" 0 FALSE "old" "female" "normal"
+## "366" 1 FALSE "old" "female" "normal"
+## "367" 0 FALSE "old" "female" "normal"
+## "368" 1 FALSE "old" "female" "normal"
+## "369" 0 FALSE "old" "female" "normal"
+## "370" 0 FALSE "old" "female" "normal"
+## "371" 0 FALSE "old" "female" "normal"
+## "372" 0 FALSE "old" "female" "normal"
+## "373" 1 FALSE "old" "female" "normal"
+## "374" 0 FALSE "old" "female" "normal"
+## "375" 2 FALSE "old" "female" "normal"
+## "376" 0 FALSE "old" "female" "normal"
+## "377" 0 FALSE "old" "female" "normal"
+## "378" 0 FALSE "old" "female" "normal"
+## "379" 0 FALSE "old" "female" "normal"
+## "380" 0 FALSE "old" "female" "normal"
+## "381" 0 FALSE "old" "female" "normal"
+## "382" 4 FALSE "old" "female" "normal"
+## "383" 0 FALSE "old" "female" "normal"
+## "384" 0 FALSE "old" "female" "normal"
+## "385" 0 FALSE "old" "female" "normal"
+## "386" 0 FALSE "old" "female" "normal"
+## "387" 3 FALSE "old" "female" "normal"
+## "388" 0 FALSE "old" "female" "normal"
+## "389" 0 FALSE "old" "female" "normal"
+## "390" 0 FALSE "old" "female" "normal"
+## "391" 0 FALSE "old" "female" "normal"
+## "392" 3 FALSE "old" "female" "normal"
+## "393" 0 FALSE "old" "female" "normal"
+## "394" 0 FALSE "old" "female" "over"
+## "395" 4 FALSE "old" "female" "over"
+## "396" 0 FALSE "old" "female" "over"
+## "397" 0 FALSE "old" "female" "over"
+## "398" 0 FALSE "old" "female" "over"
+## "399" 0 FALSE "old" "female" "over"
+## "400" 5 FALSE "old" "female" "over"
+## "401" 0 FALSE "old" "female" "over"
+## "402" 0 FALSE "old" "female" "over"
+## "403" 2 FALSE "old" "female" "over"
+## "404" 0 FALSE "old" "female" "over"
+## "405" 0 FALSE "old" "female" "over"
+## "406" 0 FALSE "old" "female" "over"
+## "407" 1 FALSE "old" "female" "over"
+## "408" 0 FALSE "old" "female" "over"
+## "409" 0 FALSE "old" "female" "over"
+## "410" 0 FALSE "old" "female" "over"
+## "411" 0 FALSE "old" "female" "over"
+## "412" 0 FALSE "old" "female" "over"
+## "413" 1 FALSE "old" "female" "over"
+## "414" 0 FALSE "old" "female" "over"
+## "415" 0 FALSE "old" "female" "over"
+## "416" 0 FALSE "old" "female" "over"
+## "417" 0 FALSE "old" "female" "over"
+## "418" 1 FALSE "old" "female" "over"
+## "419" 0 FALSE "old" "female" "over"
+## "420" 0 FALSE "old" "female" "over"
+## "421" 0 FALSE "old" "female" "over"
+## "422" 0 FALSE "old" "female" "over"
+## "423" 0 FALSE "old" "female" "over"
+## "424" 1 FALSE "old" "female" "over"
+## "425" 1 FALSE "old" "female" "over"
+## "426" 1 FALSE "old" "female" "over"
+## "427" 0 FALSE "old" "female" "over"
+## "428" 0 FALSE "old" "female" "over"
+## "429" 0 FALSE "old" "female" "over"
+## "430" 0 FALSE "old" "female" "over"
+## "431" 0 FALSE "old" "female" "over"
+## "432" 3 FALSE "old" "female" "over"
+## "433" 0 FALSE "old" "female" "obese"
+## "434" 0 FALSE "old" "female" "obese"
+## "435" 2 FALSE "old" "female" "obese"
+## "436" 0 FALSE "old" "female" "obese"
+## "437" 1 FALSE "old" "female" "obese"
+## "438" 0 FALSE "old" "female" "obese"
+## "439" 0 FALSE "old" "female" "obese"
+## "440" 0 FALSE "old" "female" "obese"
+## "441" 3 FALSE "old" "female" "obese"
+## "442" 0 FALSE "old" "female" "obese"
+## "443" 0 FALSE "old" "female" "obese"
+## "444" 0 FALSE "old" "female" "obese"
+## "445" 0 FALSE "old" "female" "obese"
+## "446" 2 FALSE "old" "female" "obese"
+## "447" 0 FALSE "old" "female" "obese"
+## "448" 0 FALSE "old" "female" "obese"
+## "449" 0 FALSE "old" "female" "obese"
+## "450" 1 FALSE "old" "female" "obese"
+## "451" 0 FALSE "old" "female" "obese"
+## "452" 0 FALSE "old" "female" "obese"
+## "453" 0 FALSE "old" "female" "obese"
+## "454" 0 FALSE "old" "female" "obese"
+## "455" 0 FALSE "old" "female" "obese"
+## "456" 4 FALSE "old" "female" "obese"
+## "457" 0 FALSE "old" "female" "obese"
+## "458" 0 FALSE "old" "female" "obese"
+## "459" 0 FALSE "old" "female" "obese"
+## "460" 0 FALSE "old" "female" "obese"
+## "461" 0 FALSE "old" "female" "obese"
+## "462" 0 FALSE "old" "female" "obese"
+## "463" 1 FALSE "old" "female" "obese"
+## "464" 0 FALSE "old" "female" "obese"
+## "465" 0 FALSE "old" "female" "obese"
+## "466" 0 FALSE "old" "female" "obese"
+## "467" 0 FALSE "old" "female" "obese"
+## "468" 0 FALSE "old" "female" "obese"
+## "469" 0 FALSE "old" "female" "obese"
+## "470" 1 FALSE "old" "female" "obese"
+## "471" 0 FALSE "old" "female" "obese"
+## "472" 0 FALSE "old" "female" "obese"
+## "473" 0 FALSE "old" "female" "obese"
+## "474" 0 FALSE "old" "female" "obese"
+## "475" 1 FALSE "old" "female" "obese"
+## "476" 0 FALSE "old" "female" "obese"
+## "477" 0 FALSE "old" "female" "obese"
+## "478" 2 FALSE "old" "female" "obese"
+## "479" 0 FALSE "old" "female" "obese"
+## "480" 3 FALSE "old" "female" "obese"
+## "481" 0 FALSE "old" "female" "obese"
+## "482" 0 FALSE "old" "female" "obese"
+## "483" 0 FALSE "old" "female" "obese"
+## "484" 0 FALSE "old" "female" "obese"
+## "485" 0 FALSE "old" "female" "obese"
+## "486" 0 FALSE "old" "female" "obese"
+## "487" 1 FALSE "old" "female" "obese"
+## "488" 0 FALSE "old" "female" "obese"
+## "489" 0 FALSE "old" "female" "obese"
+## "490" 0 FALSE "old" "female" "obese"
+## "491" 0 FALSE "old" "female" "obese"
+## "492" 0 FALSE "old" "female" "obese"
+## "493" 1 FALSE "old" "female" "obese"
+## "494" 0 FALSE "old" "female" "obese"
+## "495" 0 FALSE "old" "female" "obese"
+## "496" 0 FALSE "old" "female" "obese"
+## "497" 0 FALSE "old" "female" "normal"
+## "498" 0 FALSE "old" "female" "normal"
+## "499" 0 FALSE "old" "female" "normal"
+## "500" 0 FALSE "old" "female" "normal"
+## "501" 2 FALSE "old" "female" "normal"
+## "502" 0 FALSE "old" "female" "normal"
+## "503" 0 FALSE "old" "female" "normal"
+## "504" 0 FALSE "old" "female" "normal"
+## "505" 1 FALSE "old" "female" "normal"
+## "506" 0 FALSE "old" "female" "normal"
+## "507" 0 FALSE "old" "female" "normal"
+## "508" 0 FALSE "old" "female" "normal"
+## "509" 0 FALSE "old" "female" "normal"
+## "510" 0 FALSE "old" "female" "normal"
+## "511" 0 FALSE "old" "female" "normal"
+\end{verbatim}
+
+
+\end{document}

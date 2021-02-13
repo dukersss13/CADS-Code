@@ -1,0 +1,209 @@
+setwd("C:/Users/Duker/Desktop/Fall 2020/CS 624/Homework/HW1")
+
+# Problem 1 ####
+
+# 1a ####
+# H0: m1 = m2 & Ha: m1 != m2.
+# Null: both teaching methods produce the same results.
+# Alt: the two teaching methods produce different results.
+m1 = c(79,66,57,91,42,59)
+m2 = c(71,43,58,78,20,56)
+alpha = 0.01
+
+normality = function(data){
+  shapiro = shapiro.test(data)
+  p.value = shapiro$p.value
+  if(p.value <= alpha){print("Reject the Null. Normality is not met")}
+  else if(p.value > alpha){print("Do not reject the Null. Normality is met")}
+} 
+
+normality(m1)
+
+normality(m2)
+
+# Under the assumption that all 12 students are different, 
+# we can use the t-test.
+# The function below will conduct a t-test with 99% confidence level.
+
+t_test_99ci = function(x, y){
+  t_test_result = t.test(x, y, conf.int=TRUE, conf.level=0.99)
+  p.value = t_test_result$p.value
+  if(p.value <= alpha){print("Reject the Null")}
+  else if(p.value > alpha){print("Do not reject the Null")}
+}
+
+t_test_99ci(m1, m2)
+# Result: the conducted t-test gives us a 99% confidence level to not reject
+# the null hypothesis given the resulted p-value.
+
+# 1b #### 
+#H0: m1 = m2. Ha: m1 != m2.
+
+# Since the students were tested twice, we can use the paired t-test.
+# The function below will conduct a paired t-test with 99% confidence level.
+
+paired_t_test = function(x,y,alpha){
+  t_test_result = t.test(x, y, conf.int=TRUE, conf.level=0.99, paired = T)
+  p.value = t_test_result$p.value
+  if(p.value <= alpha){print("Reject the Null")}
+  else if(p.value > alpha){print("Do not reject the Null")}
+}
+
+paired_t_test(m1, m2, alpha)
+
+# Result: Null hypothesis states that method 1 yields the same improvement as method 2
+# If the same students are tested twice, the paired t-test shows that the p value
+# is not sufficient enough to reject the null hypothesis.
+
+# 1c ####
+conf.test = t.test(m1, mu = 80, conf.level = 0.9)
+conf.test$conf.int
+
+# The 90% confidence interval is [51.42, 79.91]. Ha: true mean != 80.
+
+# 1d ####
+
+
+# Problem 2 ####
+library(foreign)
+library(dplyr)
+
+wcgs = read.dta("wcgs.dta")
+g0 = wcgs %>%
+  filter(typchd69 == 0)
+g1 = wcgs %>%
+  filter(typchd69 == 1)
+g2 = wcgs %>% 
+  filter(typchd69 == 2)
+g3 = wcgs %>%
+  filter(typchd69 == 3)
+
+# 2a #### 
+alpha = 0.05
+
+normality(g0$weight)
+normality(g1$weight)
+normality(g2$weight)
+normality(g3$weight)
+
+# Normality is not met for any of the group.
+
+# 2b ####
+bartlett_test = function(v1.v2, data){
+  result = bartlett.test(v1.v2, data)
+  p = result$p.value
+  
+  if(p < alpha){print("Reject the Null. Variances are different across groups")}
+  else if(p >= alpha){print("Cannot reject the Null. Same variances across groups")}
+}
+
+bartlett_test(weight~typchd69, wcgs)
+
+# 2c ####
+bonferroni = function(x, g){
+  test = pairwise.t.test(x, g, p.adjust.method = "bonf")
+  p = test$p.value
+  print(p)
+}
+
+anovaTest = function(v1.v2, data){
+  test = anova(lm(v1.v2, data))
+  p = test$'Pr(>F)'[1]
+  if(p < alpha){print("Reject the Null. There's no difference of means")}
+  else if(p >= alpha){print("Cannot reject the Null.")}
+}
+
+anovaTest(weight~typchd69, wcgs)
+
+bonferroni(wcgs$weight, wcgs$typchd69)
+
+# 2d ####
+kruskal = function(v1.v2, data){
+  test = kruskal.test(v1.v2, data)
+  p = test$p.value
+  if(p < alpha){print("Reject the Null. There's no difference of medians")}
+  else if(p >= alpha){print("Cannot reject the Null.")}
+}
+
+kruskal(weight~typchd69, wcgs)
+# The Kruskal-Wallis test rejects the null. 
+# We apply the Bonf. adj. Wilcoxon signed rank test.
+
+wilcox.rank = function(v1, v2, data){
+  test = wilcox.test(v1, v2, p.adj = "bonf")
+  p = test$p.value
+  if(p < alpha){print("Reject the Null. The 4 groups have the same distributions.")}
+  else if(p >= alpha){print("Cannot reject the Null.")}
+}
+
+wilcox.rank(wcgs$weight, wcgs$typchd69, wcgs)
+
+# Problem 3 ####
+# 3a ####
+
+diet = read.delim("diets.txt",sep = "" , header = T)
+
+# H0: m0 = m1. Null Hypothesis: diet isn't effective.
+# Ha: m0 != m1. Alt Hypothesis: diet is effective.
+
+diet1 = diet %>%
+  filter(Diet == 1)
+diet2 = diet %>%
+  filter(Diet == 2)
+diet3 = diet %>%
+  filter(Diet == 3)
+diet4 = diet %>% 
+  filter(Diet == 4)
+
+# 3b ####
+
+# Prelim tests for ANOVA
+normality(diet1$WeightLoss)
+
+normality(diet2$WeightLoss)
+
+normality(diet3$WeightLoss)
+
+normality(diet4$WeightLoss)
+
+bartlett_test(WeightLoss~Diet, diet)
+
+anovaTest(WeightLoss~Diet, diet)
+
+kruskal(WeightLoss~Diet, diet)
+
+wilcox.rank(diet$WeightLoss, diet$Diet, diet)
+
+# 3d ####
+bonferroni(diet$WeightLoss, diet$Diet)
+
+# 3f ####
+diet.aov = aov(WeightLoss~Diet, diet)
+summary(diet.aov)
+# The p.value after using aov() is ~0.0003 < alpha. Thus we reject H0.
+
+# 3g ####
+t = pairwise.t.test(diet$WeightLoss, diet$Diet)
+t$p.value
+
+## Problem 4 ####
+
+run = "aabbaaaabbbaababbaaabbbbbababbbabbb"
+
+letters = strsplit(run,"")[[1]]
+count = table(letters)
+A = count[1][[1]]
+B = count[2][[1]]
+
+i = 1
+runs = 1
+len = length(letters)
+
+while (i < (len - 1)){
+  if (letters[i] != letters[i+1]) {runs = runs + 1}
+  i = i + 1
+}
+runs
+
+prob = (2*(choose(A-1,runs/2 -1))*choose(B-1, runs/2 - 1))/choose(A+B, A)
+if (prob > alpha){print("We can assume randomness")}

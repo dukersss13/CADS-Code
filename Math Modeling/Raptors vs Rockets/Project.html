@@ -1,0 +1,269 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Project</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-12-01"><meta name="DC.source" content="Project.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%Predicted Final Score: Raptors 124 - Rockets 118.</span>
+
+Raptors = main(<span class="string">'raphomeoff.csv'</span>,<span class="string">'rockawaydefense.csv'</span>)
+Rockets = main(<span class="string">'rockawayoff.csv'</span>,<span class="string">'raphomedef.csv'</span>)
+
+<span class="comment">%This function reads/converts csv files into vectors containing</span>
+<span class="comment">%statistics of the teams.</span>
+
+<span class="keyword">function</span> [fgm,fga,tpm,tpa,ftm,fta] = vect(x)
+y = table2array(readtable(x));
+fgm = sort(y(:,1))';
+fga = sort(y(:,2))';
+tpm = sort(y(:,3))';
+tpa = sort(y(:,4))';
+ftm = sort(y(:,5))';
+fta = sort(y(:,6))';
+<span class="keyword">end</span>
+
+<span class="comment">%This function takes in the attempted shots from team 1's offensive data +</span>
+<span class="comment">%team 2's defensive data &amp; calculate the uniform expected field goal</span>
+<span class="comment">%attempts through that given game.</span>
+
+<span class="comment">%efga = expected field goal attempts.</span>
+<span class="keyword">function</span> efga = ava(m,n)
+m1 = mean(m,<span class="string">'all'</span>);
+m2 = mean(n,<span class="string">'all'</span>);
+efga = (m1 + m2)/2;
+<span class="keyword">end</span>
+
+<span class="comment">%This function takes the input of 2 variables &amp; perform linear regression</span>
+<span class="comment">%to see the line of best fit through the data.</span>
+<span class="comment">%Then it will predict the field goals made given the expected field goal</span>
+<span class="comment">%attempts.</span>
+
+<span class="keyword">function</span> f = linreg(t,y,x)
+g = linspace(10,100,100);
+[r,m,b] = regression(t,y);
+f = x*m + b + r;
+c = g.*m + b +r;
+plot(g,c); hold <span class="string">on</span>; plot(x,f,<span class="string">'o'</span>);
+<span class="keyword">end</span>
+
+<span class="comment">%This function calculates the expected final score, given the amount of</span>
+<span class="comment">%expected field goals, 3 pointers &amp; free throws. Obviously, the team with</span>
+<span class="comment">%the higher score wins.</span>
+<span class="comment">%Each FG is 2 points. Each team will get an additional point for every 3-pt</span>
+<span class="comment">%shot and free throw made.</span>
+
+<span class="keyword">function</span> s = score(fg,three,ft)
+s = round(fg*2 + three + ft);
+<span class="keyword">end</span>
+
+<span class="comment">%Main function that bridges all the other functions to produce</span>
+<span class="comment">%the final expected score.</span>
+
+<span class="keyword">function</span> final_score = main(t1,t2)
+[fgm1,fga1,tpm1,tpa1,ftm1,fta1] = vect(t1);
+[fgm2,fga2,tpm2,tpa2,ftm2,fta2] = vect(t2);
+
+<span class="comment">%Calculating the expected attempts for the categories of FG's, 3pt's + FT's</span>
+<span class="comment">%Also creating 3 subplots of the offensive data for both teams.</span>
+subplot(3,1,1)
+title(<span class="string">'Predicted FG Attempts vs. Makes'</span>);
+xlabel(<span class="string">'FG Attempts'</span>), ylabel(<span class="string">'FG Makes'</span>);
+
+efga = ava(fga1,fga2);
+efgm = linreg(fga1,fgm1,efga);
+
+subplot(3,1,2)
+title(<span class="string">'Predicted 3PT Attempts vs. Makes'</span>);
+xlabel(<span class="string">'3PT Attempts'</span>), ylabel(<span class="string">'3PT Makes'</span>);
+
+etpa = ava(tpa1,tpa2);
+etpm = linreg(tpa1,tpm1,etpa);
+
+subplot(3,1,3)
+title(<span class="string">'Predicted FT Attempts vs. Makes'</span>);
+xlabel(<span class="string">'FT Attempts'</span>), ylabel(<span class="string">'FT Makes'</span>);
+
+efta = ava(fta1,fta2);
+eftm = linreg(fta1,ftm1,efta);
+
+legend(<span class="string">"Raptors' Line"</span>,<span class="string">"Raptors' EFG"</span>,<span class="string">"Rockets' Line"</span>,<span class="string">"Rockets' EFG"</span>);
+
+<span class="comment">% Estimate the final points of each team given the expected attempts + makes</span>
+<span class="comment">% for FG's, 3-pt's &amp; FT's</span>
+
+final_score = score(efgm,etpm,eftm);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">Warning: Ignoring extra legend entries. 
+
+Raptors =
+
+   124
+
+
+Rockets =
+
+   118
+
+</pre><img vspace="5" hspace="5" src="Project_01.png" alt=""> <p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%Predicted Final Score: Raptors 124 - Rockets 118.
+
+Raptors = main('raphomeoff.csv','rockawaydefense.csv')
+Rockets = main('rockawayoff.csv','raphomedef.csv')
+
+%This function reads/converts csv files into vectors containing
+%statistics of the teams. 
+
+function [fgm,fga,tpm,tpa,ftm,fta] = vect(x)
+y = table2array(readtable(x));
+fgm = sort(y(:,1))';
+fga = sort(y(:,2))';
+tpm = sort(y(:,3))';
+tpa = sort(y(:,4))';
+ftm = sort(y(:,5))';
+fta = sort(y(:,6))';
+end
+
+%This function takes in the attempted shots from team 1's offensive data +
+%team 2's defensive data & calculate the uniform expected field goal
+%attempts through that given game. 
+
+%efga = expected field goal attempts.
+function efga = ava(m,n)
+m1 = mean(m,'all');
+m2 = mean(n,'all');
+efga = (m1 + m2)/2;
+end
+
+%This function takes the input of 2 variables & perform linear regression
+%to see the line of best fit through the data. 
+%Then it will predict the field goals made given the expected field goal
+%attempts. 
+
+function f = linreg(t,y,x)
+g = linspace(10,100,100);
+[r,m,b] = regression(t,y);
+f = x*m + b + r;
+c = g.*m + b +r;
+plot(g,c); hold on; plot(x,f,'o');
+end
+
+%This function calculates the expected final score, given the amount of
+%expected field goals, 3 pointers & free throws. Obviously, the team with
+%the higher score wins. 
+%Each FG is 2 points. Each team will get an additional point for every 3-pt
+%shot and free throw made. 
+
+function s = score(fg,three,ft)
+s = round(fg*2 + three + ft);
+end 
+
+%Main function that bridges all the other functions to produce
+%the final expected score.
+
+function final_score = main(t1,t2)
+[fgm1,fga1,tpm1,tpa1,ftm1,fta1] = vect(t1);
+[fgm2,fga2,tpm2,tpa2,ftm2,fta2] = vect(t2);
+
+%Calculating the expected attempts for the categories of FG's, 3pt's + FT's
+%Also creating 3 subplots of the offensive data for both teams.
+subplot(3,1,1)
+title('Predicted FG Attempts vs. Makes');
+xlabel('FG Attempts'), ylabel('FG Makes');
+
+efga = ava(fga1,fga2);
+efgm = linreg(fga1,fgm1,efga);
+
+subplot(3,1,2)
+title('Predicted 3PT Attempts vs. Makes');
+xlabel('3PT Attempts'), ylabel('3PT Makes');
+
+etpa = ava(tpa1,tpa2);
+etpm = linreg(tpa1,tpm1,etpa);
+
+subplot(3,1,3)
+title('Predicted FT Attempts vs. Makes');
+xlabel('FT Attempts'), ylabel('FT Makes');
+
+efta = ava(fta1,fta2);
+eftm = linreg(fta1,ftm1,efta);
+
+legend("Raptors' Line","Raptors' EFG","Rockets' Line","Rockets' EFG");
+
+% Estimate the final points of each team given the expected attempts + makes
+% for FG's, 3-pt's & FT's
+
+final_score = score(efgm,etpm,eftm);
+end
+
+
+
+
+
+
+
+
+##### SOURCE END #####
+--></body></html>

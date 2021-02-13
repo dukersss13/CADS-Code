@@ -1,0 +1,122 @@
+---
+title: "Group Module 1"
+author: "Duc Le, Evan Yuan, Yassaman Davilu"
+date: "9/30/2020"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+---
+
+```{r}
+library(dplyr)
+library(plyr)
+library(ggplot2)
+
+tips = read.csv("tips.csv")
+attach(tips)
+```
+
+### Question 1
+#### Examine the association between the total bill and tip. How does this relationship change based on sex, smoker status, and the combination of the two (i.e. male smokers, female non-smokers, etc.)?
+<br/>
+We want to analyze the effect the variable "sex" has on the correlation between Total Bill vs. Tip Rate (Tip Rate = Tips/Total Bill)
+
+```{r}
+tip.rate = TIP/TOTBILL
+qplot(TOTBILL, tip.rate, xlab = "Total Bill", ylab = "Tip Rate", col = SEX)
+```
+As far as we can see, there doesn't seem to be any disparity determined by sex when it comes to analyzing Total Bill vs. Tip Rate.
+<br/>
+Next, we ran an ANOVA test to see if there's any significant correlation between Tip Rate & Sex.
+```{r}
+anova(lm(tip.rate~SEX, data = tips))
+```
+An ANOVA statistic test provide the results of insignificant F-statistics. These results show that "SEX" & "SMOKER" (status) don't really have an effect on the Tip Rate.
+<br/>
+Next, we construct a boxplot to see if there's any significant difference of variance between the 2 sexes vs. Tip Rate.
+```{r}
+boxplot(tip.rate~SEX, xlab = "Sex", ylab = "Tip Rate",
+        names = c("Male", "Female"))
+```
+The plot shows a slightly higher spread in the Male Tip Rate vs. Female but the medians are the same.
+<br/>
+Then, we analyze the relationship between the Tip Rate vs. different combinations of Sex & Smoker status (Male Smoker, Female Non-smoker, etc) with a boxplot.
+```{r}
+smoker.sex = paste(SMOKER, SEX)
+boxplot(tip.rate~smoker.sex, xlab = "Combinations of Smoker + Sex",
+        ylab = "Tip Rate",
+        names = c("Non-smoker Males", "Non-smoker Females",
+                  "Smoker Males", "Smoker Females"))
+```
+
+Slight variances between the groups but no significant differences in terms of the variances + medians.
+
+<br/>
+Lastly, we ran ANOVA tests for Tip Rate vs. Sex + Smoker
+```{r}
+anova(lm(tip.rate~SEX+SMOKER, data = tips))
+```
+Once again, the F-Statistics are too small for us to admit to any significance variables like Smoker Status or Sex might have on the Tip Rate.
+<br/>
+#### Conclusion for Q1 
+After various statistical tests & visualizations, we don't find any significant correlation/effect variables such as Sex + Smoker have on the Tip Rate (or Total Bill vs. Tip). We think the data set is limited and biased since these records were saved by one person. 
+<br/>
+### Question 2
+#### At what time & day is the tip rate the highest/lowest? 
+<br/>
+First, we use boxplots to see the relationship between Tip Rate vs. Day & Tip Rate vs. Time.
+```{r}
+boxplot(tip.rate~DAY, xlab = "Day", ylab = "Tip Rate",
+        names = c("Thursday", "Friday", "Saturday", "Sunday"))
+boxplot(tip.rate~TIME, xlab = "Time", ylab = "Tip Rate",
+        names = c("Morning", "Night"))
+```
+Outside of notable outliers, no significant differences can be drawn from the box plots.
+<br/>
+Now we look at the relationship between the Tip Rate vs. the combinations of the Days & Times.
+```{r}
+time.day = paste(TIME, DAY)
+time.day2 = mapvalues(time.day, c("0 3", "0 4", "1 3", "1 4", "1 5", "1 6"), 
+          c("Morning Thursday", "Morning Friday", "Night Thursday",
+            "Night Friday ", "Night Saturday ", "Night Sunday "))
+boxplot(tip.rate~time.day2, xlab = "Time & Day", ylab = "Tip Rate")
+```
+Few takeaways from the boxplot:
+
+1. There are more night observations than day. The waitress's schedule isn't consistent as she obviously has recorded more night shifts than day shifts.
+
+2. Although the variances aren't exactly identical between each variable, there isn't a big disparity between their medians. 
+
+3. We cannot do much with only 1 table recorded for Thursday Night.
+<br/>
+ANOVA test
+```{r}
+anova(lm(tip.rate~TIME+DAY, data = tips))
+```
+The results from the ANOVA test suggest we cannot reject the null hypothesis (P-values > 0.05).
+<br/>
+
+#### Conclusion for Q2
+The given data recorded by the waitress is not sufficient enough for us to find any conclusive evidence that may suggest serving tables at day time results in a better tip rate than vs. night time. 
+<br/>
+
+#### Bonus Analysis
+We want to lastly investigate to see if the tip rate is at all affected by the party size. 
+
+```{r}
+boxplot(tip.rate ~ tips$SIZE, data = tips,xlab = "Party Size", ylab ="Tip Rate")
+```
+<br/>
+The plot interestingly shows that the median tip rate from parties of 1 is higher than the rest. Parties of 2 have the highest variance in contrast to parties of 6, which have the lowest range for tip rate.
+<br/>
+```{r}
+anova(lm(tip.rate~SIZE, data = tips))
+```
+Finally, an ANOVA test that produces a p-value < 0.05, which means we reject the null hypothesis. The means of the different groups are not equal. 
+<br/>
+
+#### Conclusion
+We think the reason behind a higher usual tip rate (~20%) from a single party is due to a probably a smaller overall bill, therefore the customer may be more comfortable tipping a slightly higher percentage. In comparison to the tip rate from party size of 6, their bills will mostly be larger therefore the range of tips should be smaller.
+ 
+

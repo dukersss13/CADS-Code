@@ -1,0 +1,12 @@
+name: MeditationApp
+title: MeditationApp
+username:
+account: dukerss13
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3147040
+bundleId: 3811984
+url: https://dukerss13.shinyapps.io/MeditationApp/
+when: 1604344150.52236
+asMultiple: FALSE
+asStatic: FALSE

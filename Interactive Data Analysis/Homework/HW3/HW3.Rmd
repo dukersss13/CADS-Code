@@ -1,0 +1,88 @@
+---
+title: "HW3"
+author: "Duc Le"
+date: "9/20/2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+Loading the data frame created from task 5.
+```{r}
+library(tibble)
+library(dplyr)
+
+load("map.coords.RData")
+ccA = read.csv("ccA.csv")
+ccB = read.csv("ccB.csv")
+gdp = read.csv("gdp.csv")
+df = merge(ccA, ccB, all = TRUE)
+df2 = cbind(df, gdp)
+```
+
+### Problem 1
+Inner merge
+```{r}
+inner = merge(df2, coords, all = FALSE)
+dim(inner)
+```
+Left merge
+```{r}
+left = merge(df2, coords, all.x = TRUE)
+dim(left)
+```
+Right merge
+```{r}
+right = merge(df2, coords, all.y = TRUE)
+dim(right)
+```
+
+There's a clear difference in the # of rows after each merge. This is obviously caused by the number of unmatched rows merged between the data frames, depending on each method.
+
+### Problem 2
+
+2a)
+```{r}
+data = inner %>%
+  select(gdp, lat)
+
+quantiles = quantile(data$gdp)
+quantiles
+```
+
+2b)
+```{r}
+gdp.q = findInterval(data$gdp, quantiles, rightmost.closed = TRUE)
+table(gdp.q)
+```
+Yes the function returns 4 quartiles & their associated medians. It also provides the amount of elements in each quartile.
+
+2c)
+```{r}
+rev_gdp.q = factor(gdp.q,levels = 4:1)
+table(rev_gdp.q)
+```
+
+2d)
+```{r}
+q1 = data %>%
+  filter(gdp <= quantiles[2])
+q1.lat = mean(abs(q1$lat))
+q1.lat
+
+q2 = data %>%
+  filter(gdp >= quantiles[2] & gdp <= quantiles[3])
+q2.lat = mean(abs(q2$lat))
+q2.lat
+
+q3 = data %>%
+  filter(gdp >= quantiles[3] & gdp <= quantiles[4])
+q3.lat = mean(abs(q3$lat))
+q3.lat
+
+q4 = data %>%
+  filter(gdp >= quantiles[4] & gdp <= quantiles[5])
+q4.lat = mean(abs(q4$lat))
+q4.lat
+```
+There isn't a big discrepancy between the means of latitude associated to each quartile. 

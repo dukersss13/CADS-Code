@@ -1,0 +1,122 @@
+---
+title: "Quiz1"
+author: "Duc Le"
+date: "10/22/2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+#### Problem 1 
+
+
+#### 1a
+```{r}
+library(MASS)
+library(ggplot2)
+data(mpg)
+
+head(mpg)
+mpg.var = (mpg['cty'] + mpg['hwy'])/2
+mpg = cbind(mpg, mpg.var)
+names(mpg)[12] = 'avg.mpg'
+drop = c("cty","hwy")
+
+df = mpg[,!(names(mpg) %in% drop)]
+```
+
+#### 1b
+```{r}
+dim(df)
+names(df)
+summary(df)
+str(df)
+attach(df)
+
+hist(displ, freq = F)
+hist(cyl, freq = F)
+boxplot(avg.mpg ~ manufacturer)
+boxplot(avg.mpg ~ trans)
+boxplot(avg.mpg ~ model)
+```
+
+#### 1c
+```{r}
+boxplot(avg.mpg ~ manufacturer)
+```
+From looking at the avg mpg by manufacturer in this dataset, Volkswagen seems to have a few outliers if we base it off the boxplot. Further analysis can be done using other statistical tests to examine this hypothesis.
+
+<br/>
+#### 1d
+```{r}
+mlm = lm(avg.mpg ~., data = df)
+best.lm = lm(avg.mpg ~model + displ + year + cyl + fl + class, data = df)
+```
+This following model with these features give the lowest AIC score. Thus it's
+probably the most efficient linear model to use.
+
+<br/>
+#### 1e
+```{r}
+plot(best.lm, which = c(1))
+```
+Judging from the first Residuals vs. Fitted Values plot, we see that the red line
+representing the mean value of the residuals is hovering over 0 for the majority
+of the fitted values. However, it does deviate a bit from 0 towards the end. This
+could be caused by an value with high leverage + influence.
+
+```{r}
+plot(best.lm, which = c(2))
+```
+The QQ plot shows us good results as the stand. residuals stay on the line.
+
+```{r}
+plot(best.lm, which = c(3))
+```
+The Stand. Res. vs Fitted Values plot does not look too good since the red line
+is not near 1 where we want it to be. As we can also see at the top, we have some
+fitted values with extremely high residuals. We can analyze their Cook's distance
+to conclude our residuals analysis.
+
+```{r}
+plot(best.lm, which = c(5))
+```
+Looking at this graph, we see that there are multiple points with high leverage,
+but 2 in particular with a Cook's Distance > 1, thus indicates that they are
+a great influence to our line of best fit. Eliminating these samples could possibly
+improve our linear model.
+
+#### 1f
+Looking at our result from part d), the number of cofficients involved could be
+overwhelming. A more efficient way to analyze the significance of these predictors
+could be to look at their associated p-values and compare them to our desired alpha.
+Which is 0.05. Any feature with an associated p-value below alpha should be considered
+a significant predictor to our model, thus leaving us room to eliminate any other
+unnecessary features.
+
+#### 1g
+```{r}
+stepAIC(best.lm, direction = "both")
+
+best.lm2 = lm(avg.mpg ~ model + displ + year + cyl + fl, data = df)
+```
+
+#### 1h
+```{r}
+plot(best.lm2, which = c(1))
+plot(best.lm2, which = c(2))
+plot(best.lm2, which = c(3))
+plot(best.lm2, which = c(5))
+```
+
+#### 1i
+```{r}
+summary(best.lm2)
+```
+
+This model that resulted from the 2-way stepAIC function produces results very similar to our previous model in 1d. This is plausible since the AIC difference
+between the two models si not significant. We can once again analyze the coefficients of each predictor or their p-values to measure their level of significance.
+
+#### 1j
+For this particular case, I would probably prefer the second model (from 1g) since it does get the job done with more simplicity. 

@@ -1,0 +1,16 @@
+---
+title: "Meditation App RMarkdown"
+author: "Duc Le"
+date: "11/2/2020"
+output:
+  html_document:
+    df_print: paged
+---
+
+Link: <https://dukerss13.shinyapps.io/MeditationApp/>
+
+Additional feature: I added an output that displays the participant's most frequent used program (favorite program). 
+
+Interesting finding: Not a lot of people meditate for the full hour. The majority of the participants seem to like to meditate for up to 20 minutes.
+
+
