@@ -28,28 +28,28 @@ Holt = function(data,n){
   return(prediction)
 }
 
-#Lastly, I want to analyze Inovio & Co-Diagnostics stocks.
+# I want to analyze Square, Tesla, Draftkings, Pinterest & Opendoor
 library(quantmod)
 
-stocks_list = c("SQ", "SHLL", "SRNE", "SQ", "TSLA")
+stocks_list = c("SQ", "TSLA", "DKNG", "PINS", "OPEN")
 
 for (i in stocks_list){
   getSymbols(i,from = "2020-01-01", to = Sys.Date())
 }
 
-stocks = list(SQ, TSLA, SRNE, SQ, WKHS)
+stocks = list(SQ, TSLA, DKNG, PINS, OPEN)
 
 closing = lapply(stocks, function(s) {
   return(s[, 4])
 })
 
-SQ = closing[[4]]
+SQ = closing[[1]]
 
 acf(SQ)
 pacf(SQ)
-SQ30 = arimaFunction(SQ, 30)
+SQ30 = arimaFunction(SQ, 20)
 SQ30
 
-HW.SQ30 = Holt(SQ, 30)
+HW.SQ30 = Holt(SQ, 20)
 HW.SQ30
 
